@@ -1,0 +1,47 @@
+# Base dependencies — platform-agnostic (Python 3.12).
+# PyTorch is installed SEPARATELY via the per-OS file so the correct wheel is used:
+#   macOS (Apple Silicon, MPS):  pip install -r requirements-macos.txt
+#   Ubuntu (NVIDIA, CUDA):       pip install -r requirements-linux-cuda.txt
+# See plans/IMPLEMENTATION_PLAN.md sections 3.3 and 11.
+
+# --- Core LangChain ---
+langchain>=0.3.0
+langchain-core>=0.3.0
+langchain-community>=0.3.0
+langchain-chroma>=0.2.0
+langchain-text-splitters>=0.3.0
+# Legacy retrievers (ParentDocumentRetriever, EnsembleRetriever, SelfQueryRetriever,
+# InMemoryStore, AttributeInfo) moved out of `langchain` in the 1.x line.
+langchain-classic>=1.0.0
+
+# --- Model providers (hybrid: local default, OpenAI optional) ---
+langchain-huggingface>=0.1.0
+langchain-ollama>=0.2.0
+langchain-openai>=0.2.0
+
+# --- PDF parsing (layout-aware, OCR, Markdown tables) ---
+docling>=2.0.0
+langchain-docling>=0.1.0
+
+# --- Embeddings / reranker / transformers ---
+sentence-transformers>=3.0
+transformers>=4.40
+
+# --- Retrieval ---
+rank_bm25>=0.2.2
+chromadb>=0.5.0
+networkx>=3.0
+
+# --- Evaluation ---
+ragas>=0.2.0
+datasets>=2.20.0
+
+# --- UI + utilities ---
+streamlit>=1.38.0
+pandas>=2.0
+python-dotenv>=1.0
+pydantic>=2.0
+pyyaml
+
+# --- Testing ---
+pytest>=8.0

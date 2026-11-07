@@ -1,0 +1,54 @@
+# =====================================================================
+# ISO 15118 RAG — environment template
+# Copy to `.env` and edit. Never commit real secrets.
+# =====================================================================
+
+# --- OpenRouter API key (shared by BOTH the generator and the embedding model) ---
+# Paste your key here. Never commit the real .env file.
+
+# --- Generator (chat LLM) via OpenRouter ---
+LLM_PROVIDER=openai
+LLM_MODEL=qwen/qwen3.7-flash
+LLM_BASE_URL=https://openrouter.ai/api/v1
+LLM_API_KEY_ENV=OPENROUTER_API_KEY
+OLLAMA_BASE_URL=http://localhost:11434   # only used when LLM_PROVIDER=ollama
+
+# --- Embeddings via OpenRouter ---
+EMBEDDING_PROVIDER=openai
+EMBEDDING_MODEL=qwen/qwen3-embedding-8b
+EMBEDDING_BASE_URL=https://openrouter.ai/api/v1
+EMBEDDING_API_KEY_ENV=OPENROUTER_API_KEY
+# Apply the model's built-in query/document prompts (auto = only for Qwen3-Embedding).
+# Set to 0 when using a model without built-in prompts.
+EMBEDDING_USE_PROMPTS=auto
+EMBEDDING_QUERY_PROMPT_NAME=query
+EMBEDDING_DOC_PROMPT_NAME=document
+# Flatten Markdown tables (drop pipes/separators) before embedding; stored text is unchanged.
+EMBEDDING_STRIP_TABLES=1
+
+# --- Reranker (Pairing 3 Stage 4) ---
+RERANKER_MODEL=BAAI/bge-reranker-v2-m3
+# Cross-encoder max sequence length (bge-reranker-v2-m3 supports up to 8192).
+RERANKER_MAX_LENGTH=1024
+
+# --- Device override (blank = auto-detect cuda > mps > cpu) ---
+DEVICE=                         # cuda | mps | cpu | (blank for auto)
+
+# --- Vector store ---
+CHROMA_PERSIST_DIR=./chroma_db
+
+# --- Retrieval ---
+TOP_K=5
+HYBRID_VECTOR_WEIGHT=0.6
+HYBRID_BM25_WEIGHT=0.4
+RERANK_TOP_N=20
+
+# --- Input corpus (all *.pdf in this directory) ---
+ISO_PDF_DIR=./Iso
+
+# --- Parsed-document cache (Docling JSON) to avoid re-converting PDFs ---
+DOCLING_CACHE_DIR=./data/parsed
+# Docling batch size (1 keeps peak memory low on 8 GB machines)
+DOCLING_BATCH_SIZE=1
+# Vector store ingestion batch size (Chroma caps a single upsert at ~5461)
+VECTORSTORE_BATCH_SIZE=1000

@@ -1,0 +1,8 @@
+# macOS / Apple Silicon (M1 and later) install file.
+# The default PyPI torch wheel for macOS arm64 includes MPS support — no extra index needed.
+# Usage:
+#   python3.12 -m venv .venv && source .venv/bin/activate
+#   pip install -r requirements-macos.txt
+
+-r requirements.txt
+torch>=2.2

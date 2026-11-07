@@ -1,0 +1,1141 @@
+{
+  "pairing": "Pairing 3: Advanced ISO + Graph",
+  "num_queries": 32,
+  "retrieval": {
+    "num_queries": 32,
+    "recall@1": 0.90625,
+    "precision@1": 0.90625,
+    "ndcg@1": 0.90625,
+    "recall@3": 0.9375,
+    "precision@3": 0.7291666666666666,
+    "ndcg@3": 0.9143488239826426,
+    "recall@5": 0.96875,
+    "precision@5": 0.65625,
+    "ndcg@5": 0.9219833394532406,
+    "recall@10": 0.96875,
+    "precision@10": 0.328125,
+    "ndcg@10": 0.9219833394532406,
+    "mrr": 0.9244791666666666
+  },
+  "retrieval_section": {
+    "num_queries": 32,
+    "recall@1": 0.90625,
+    "precision@1": 0.90625,
+    "ndcg@1": 0.90625,
+    "recall@3": 0.96875,
+    "precision@3": 0.7604166666666666,
+    "ndcg@3": 0.9385271244348015,
+    "recall@5": 1.0,
+    "precision@5": 0.7,
+    "ndcg@5": 0.9485443254601266,
+    "recall@10": 1.0,
+    "precision@10": 0.35,
+    "ndcg@10": 0.9485443254601266,
+    "mrr": 0.9401041666666666
+  },
+  "chunking": {
+    "chunk_count": 2007,
+    "avg_chunk_size_chars": 709.642750373692,
+    "min_chunk_size_chars": 33,
+    "max_chunk_size_chars": 3989,
+    "relevance_density": null,
+    "boundary_coherence": null
+  },
+  "generation": {
+    "faithfulness": null,
+    "answer_relevance": null,
+    "answer_correctness": null,
+    "citation_accuracy": 0.9778325123152709
+  },
+  "efficiency": {
+    "indexing_time_ms": 115655.08141199998,
+    "avg_retrieval_ms": 4318.451757312495,
+    "avg_generation_ms": 13205.180040687503,
+    "avg_e2e_ms": 17232.008448124998,
+    "index_size_bytes": 62565220,
+    "llm_calls_per_query": 1.0,
+    "tokens_per_query": 4847.125
+  },
+  "judge_coverage": {
+    "queries_judged": 0,
+    "metrics_attempted": 0
+  },
+  "flags": [
+    {
+      "metric": "generation.faithfulness",
+      "reason": "judge unavailable or not applicable (e.g. no cited sections / no gold answer)"
+    },
+    {
+      "metric": "generation.answer_relevance",
+      "reason": "judge unavailable or not applicable (e.g. no cited sections / no gold answer)"
+    },
+    {
+      "metric": "generation.answer_correctness",
+      "reason": "judge unavailable or not applicable (e.g. no cited sections / no gold answer)"
+    }
+  ],
+  "per_query": [
+    {
+      "query_id": "q01",
+      "query": "What is the maximum AC charging voltage?",
+      "category": "parameter_lookup",
+      "answer": "Based on the provided context, according to ISO 15118-2, Section D.2.2 (page 287), the `EVMaxVoltage` element in the AC-based ChargeParameterDiscoveryReq message example specifies a maximum charging voltage of **230 V**.",
+      "num_retrieved": 5,
+      "relevance_flags": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "section_flags": [
+        false,
+        false,
+        true,
+        true,
+        true
+      ],
+      "retrieved_sections": [
+        "D.2.2",
+        "8.5.3.3",
+        "A.1",
+        "A.1",
+        "A.1"
+      ],
+      "retrieval_ms": 14798.22530300001,
+      "generation_ms": 3336.8237210000007,
+      "e2e_ms": 18135.04902400001,
+      "tokens": 7506,
+      "citation_accuracy": null
+    },
+    {
+      "query_id": "q02",
+      "query": "Describe the SLAC communication setup.",
+      "category": "procedure",
+      "answer": "Based on the provided context from ISO 15118-3, the SLAC communication setup is structured around three main components: control pilot activation timing, message exchange (MME) parameter definitions, and attenuation/PSD referencing.\n\n**1. Control Pilot Activation & Communication Readiness**\nDuring the plug-in phase, AC EVSEs equipped with a Type 2 outlet or DC EVSEs with a Type 1 connector should only apply voltage to the control pilot once their low-layer communication module is ready for communication. This practice accelerates the overall communication setup. Specifically, the EVSE shall only apply a 5% control pilot duty cycle upon receiving the first SLAC message, confirming module readiness (ISO 15118-3, Section 7.3.1 & [V2G3-M07-02]).\n\n**2. Message Exchange (MMEs) & Parameter Definitions**\nThe low-layer communication module uses a defined set of Message Exchange Messages (MMEs) for the SLAC process, with parameters specified in Table A.4 (ISO 15118-3, Section A.9.2.2). The Ethernet Destination MAC address field is configured as either Broadcast or Unicast per these tables. The key MMEs and their exact field/value structures are:\n\n*From Table A.2 (Parameters Exchange):*\n| MME | Field | Octet No. | Size (Octets) | Value | Definition |\n|---|---|---|---|---|---|\n| CM_SLAC_PARM.REQ Broadcast | APPLICATION_TYPE | 0 | 1 | 0x00 | Fixed value indicating 'PEV-EVSE matching' |\n| CM_SLAC_PARM.REQ Broadcast | SECURITY_TYPE | 1 | 1 | 0x00 | Fixed value indicating 'No Security' |\n| CM_SLAC_PARM.REQ Broadcast | RunID | 2 to 9 | 8 | variable | Identifier for a matching run, randomly chosen by the EV |\n| CM_SLAC_PARM.CNF Unicast | M-SOUND_TARGET | 0 to 5 | 6 | 0xFFFFFFFFFFFFFixed | Indicates M-Sounds sent as Ethernet broadcast |\n| CM_SLAC_PARM.CNF Unicast | NUM_SOUNDS | 6 | 1 | C_EV_match_MNBC | Number of expected M-Sounds |\n| CM_SLAC_PARM.CNF Unicast | Time_Out | 7 | 1 | 0x06 | Duration TT_EVSE_match_MNBC |\n| CM_SLAC_PARM.CNF Unicast | RESP_TYPE | 8 | 1 | 0x01 | Fixed value indicating 'Other GP station' |\n| CM_SLAC_PARM.CNF Unicast | FORWARDING_STA | 9 to 14 | 6 | EV Host MAC address | Destination of SLAC results |\n| CM_SLAC_PARM.CNF Unicast | APPLICATION_TYPE | 15 | 1 | 0x00 | Fixed value indicating 'PEV-EVSE Matching' |\n| CM_SLAC_PARM.CNF Unicast | SECURITY_TYPE | 16 | 1 | 0x00 | Fixed value indicating 'No Security' |\n| CM_SLAC_PARM.CNF Unicast | RunID | 17 to 24 | 8 | variable | Must match the RunID from CM_SLAC_PARM.REQ |\n\n*From Table A.4 (continued):*\n| MME | Field | Octet no. | Size (Octets) | Value | Definition |\n|---|---|---|---|---|---|\n| CM_ATTEN_CHAR.RSP Unicast | APPLICATION_TYPE | 0 | 1 | 0x00 | Fixed value indicating 'PEV-EVSE Matching' |\n| CM_ATTEN_CHAR.RSP Unicast | SECURITY_TYPE | 1 | 1 | 0x00 | Fixed value indicating 'No Security' |\n| CM_ATTEN_CHAR.RSP Unicast | SOURCE_ADDRESS | 2 to 7 | 6 | MAC address of the EV Host | Initiator of the SLAC process |\n| CM_ATTEN_CHAR.RSP Unicast | RunID | 8 to 15 | 8 | variable | Must match CM_SLAC_PARM.REQ |\n| CM_ATTEN_CHAR.RSP Unicast | RESULT | 50 | 1 | 0x00 | 0x00 indicates a successful SLAC process |\n| CM_ATTEN_PROFILE.IND | PEV MAC | 0 to 5 | 6 | MAC address of the EV Host | EV Host identifier |\n| CM_ATTEN_PROFILE.IND | NumGroups | 6 | 1 | 0x3A | Number of OFDM carrier groups used |\n| CM_ATTEN_PROFILE.IND | RSVD | 7 | 1 | 0x00 | reserved |\n| CM_ATTEN_PROFILE.IND | AAG[1] to AAG[58] | 8 to 65 | 1 each | Attenuation value | Average Attenuation of Groups 1\u201358 |\n\n**3. Attenuation Measurement & PSD Reference**\nFor accurate SLAC characterization, the exact Power Spectral Density (PSD) at the EVSE inlet must be known as a baseline reference. Any attenuation profile received from an EVSE is validated by comparing it against a reference value calculated as: `Tx-PSD at the inlet minus the -50 dBm/Hz reference` defined for SLAC measurements (ISO 15118-3, Section A.11.4.1).",
+      "num_retrieved": 5,
+      "relevance_flags": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "section_flags": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "retrieved_sections": [
+        "7.3.1",
+        "A.9.2.2",
+        "A.9.1.2",
+        "A.11.4.1",
+        "A.9.2.2"
+      ],
+      "retrieval_ms": 3780.610333999988,
+      "generation_ms": 26157.394627999995,
+      "e2e_ms": 29938.00496199998,
+      "tokens": 9638,
+      "citation_accuracy": 1.0
+    },
+    {
+      "query_id": "q03",
+      "query": "What is an actor in ISO 15118?",
+      "category": "definition",
+      "answer": "According to ISO 15118-1, Section 3.1.1, an **actor** is defined as an `\"entity which characterizes a role played by a user or any other system that interacts with the subject ISO 15118-1:2019.\"` \n\nThe standard further differentiates actors by their communication role, such as a **primary actor** (e.g., a V2G Entity participating in V2G communication) and a **secondary actor** (e.g., a Charging Station Operator responsible for infrastructure and energy management).",
+      "num_retrieved": 5,
+      "relevance_flags": [
+        true,
+        true,
+        true,
+        true,
+        false
+      ],
+      "section_flags": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "retrieved_sections": [
+        "3.1.1",
+        "3.1.14",
+        "3.38",
+        "1",
+        "1"
+      ],
+      "retrieval_ms": 2759.1426870000078,
+      "generation_ms": 12508.223680000014,
+      "e2e_ms": 15267.366367000022,
+      "tokens": 3410,
+      "citation_accuracy": 1.0
+    },
+    {
+      "query_id": "q04",
+      "query": "What are ancillary services?",
+      "category": "definition",
+      "answer": "According to ISO 15118-1, Section 3.1.2, ancillary services are defined as **\"services necessary for the operation of an electric power system provided by the system operator and/or by power system users.\"**",
+      "num_retrieved": 5,
+      "relevance_flags": [
+        true,
+        true,
+        false,
+        false,
+        false
+      ],
+      "section_flags": [
+        true,
+        true,
+        false,
+        false,
+        false
+      ],
+      "retrieved_sections": [
+        "3.1.2",
+        "3.1.20",
+        "F",
+        "F",
+        "F"
+      ],
+      "retrieval_ms": 3300.8606690000306,
+      "generation_ms": 4858.948760999965,
+      "e2e_ms": 8159.809429999996,
+      "tokens": 3708,
+      "citation_accuracy": 1.0
+    },
+    {
+      "query_id": "q05",
+      "query": "What is authentication in ISO 15118?",
+      "category": "definition",
+      "answer": "Based on the provided context, authentication in ISO 15118 is defined and implemented in two key ways:\n\n* **Definition & Scope:** According to **ISO 15118-1, Section 3.1.49**, the term \"identification\" within the ISO 15118 series explicitly includes authentication. This means authentication verifies that the provided identifying information is correct and actually belongs to the EVCC, USER, or SECC.\n* **Implementation & Agreement:** According to **ISO 15118-2, Section 7.7.3.1**, authentication is established at the transport layer using TLS, which supports both unilateral and mutual authentication. However, for ISO 15118 security requirements, it was specifically agreed to use **unilateral authentication**, where the EVCC authenticates the SECC.",
+      "num_retrieved": 5,
+      "relevance_flags": [
+        true,
+        true,
+        false,
+        false,
+        false
+      ],
+      "section_flags": [
+        true,
+        true,
+        false,
+        false,
+        false
+      ],
+      "retrieved_sections": [
+        "3.1.49",
+        "7.7.3.1",
+        "J.1",
+        "J.2",
+        "3"
+      ],
+      "retrieval_ms": 19741.72717199997,
+      "generation_ms": 0.0,
+      "e2e_ms": 10409.779975999982,
+      "tokens": 2694,
+      "citation_accuracy": 1.0
+    },
+    {
+      "query_id": "q06",
+      "query": "What is a battery management system?",
+      "category": "definition",
+      "answer": "According to ISO 15118-1, Section 3.1.8, a battery management system (BMS) is an electronic device that controls or manages the electric and thermal functions of the battery system and provides communication between the battery system and other vehicle controllers.",
+      "num_retrieved": 5,
+      "relevance_flags": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ],
+      "section_flags": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ],
+      "retrieved_sections": [
+        "3.1.8",
+        "8.6.2.1",
+        "3.1.12",
+        "8.4.5.3.1",
+        "1"
+      ],
+      "retrieval_ms": 3873.696095000014,
+      "generation_ms": 8521.544022999933,
+      "e2e_ms": 12395.240117999947,
+      "tokens": 2794,
+      "citation_accuracy": 1.0
+    },
+    {
+      "query_id": "q07",
+      "query": "What is basic signalling?",
+      "category": "definition",
+      "answer": "Based on the provided context, basic signalling is defined and characterized as follows:\n\n- **Definition:** According to ISO 15118-1, Section 3.1.7, basic signalling is defined as `\"physical signalling according to the pilot function.\"` The standard explicitly notes that this definition is provided by IEC 61851-1:2017, Annex A.\n- **Operation & Function:** Per ISO 15118-3, Section 6.2.1, basic signalling follows IEC-1, with all timings compliant with IEC-1, Annex A. It utilizes bidirectional signalling to convey essential charging data: EV-related information is indicated through control pilot states, and EVSE-related information is indicated through the duty cycle of the control pilot signal. This signalling method is used in any charging process, regardless of whether high-level communication is present.\n- **Scope & Requirements:** ISO 15118-3, Sections 6.2, A.6.2, and B.7 state that there are no additional technology-specific requirements for basic signalling. General communication requirements are detailed in the main body of the standard, while technology-specific implementations are covered in the respective annexes.",
+      "num_retrieved": 5,
+      "relevance_flags": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "section_flags": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "retrieved_sections": [
+        "6.2.1",
+        "3.1.7",
+        "A.6.2",
+        "B.7",
+        "6.2"
+      ],
+      "retrieval_ms": 3153.4133339999926,
+      "generation_ms": 20249.24168000001,
+      "e2e_ms": 23402.655014000004,
+      "tokens": 4844,
+      "citation_accuracy": 1.0
+    },
+    {
+      "query_id": "q08",
+      "query": "What is a certificate in ISO 15118?",
+      "category": "definition",
+      "answer": "According to ISO 15118-1, Section 3.1.11, a **certificate** is defined as an *\"electronic document which uses a digital signature to bind a public key with an identity.\"* \n\nThe standard further notes that the ISO 15118 series covers multiple certificates for different purposes, such as contract certificates (which include the EMAID) and OEM provisioning certificates.",
+      "num_retrieved": 5,
+      "relevance_flags": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ],
+      "section_flags": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ],
+      "retrieved_sections": [
+        "3.1.11",
+        "unknown",
+        "3",
+        "3.1.12",
+        "unknown"
+      ],
+      "retrieval_ms": 1689.9229219999938,
+      "generation_ms": 5629.116294000027,
+      "e2e_ms": 7319.039216000021,
+      "tokens": 2350,
+      "citation_accuracy": 1.0
+    },
+    {
+      "query_id": "q09",
+      "query": "What does charge mean in ISO 15118?",
+      "category": "definition",
+      "answer": "According to ISO 15118-1, Section 3.1.12, **\"charge\"** is defined as storing electrical energy in the vehicle battery.",
+      "num_retrieved": 5,
+      "relevance_flags": [
+        true,
+        false,
+        true,
+        false,
+        false
+      ],
+      "section_flags": [
+        true,
+        true,
+        true,
+        false,
+        true
+      ],
+      "retrieved_sections": [
+        "3.1.12",
+        "1",
+        "B.3",
+        "3.36",
+        "1"
+      ],
+      "retrieval_ms": 6941.290833999972,
+      "generation_ms": 3297.786082000015,
+      "e2e_ms": 10239.076915999987,
+      "tokens": 2304,
+      "citation_accuracy": 1.0
+    },
+    {
+      "query_id": "q10",
+      "query": "What is a charger?",
+      "category": "definition",
+      "answer": "Based on the provided context, according to ISO 15118-1, Section 3.1.13, a charger is defined as a **\"power converter that performs the necessary functions for charging a battery.\"**",
+      "num_retrieved": 5,
+      "relevance_flags": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ],
+      "section_flags": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ],
+      "retrieved_sections": [
+        "3.1.13",
+        "3.1.34",
+        "3.1.33",
+        "E.2.2.3",
+        "3.1.16"
+      ],
+      "retrieval_ms": 3834.3504160000066,
+      "generation_ms": 3253.2786479999913,
+      "e2e_ms": 7087.629063999998,
+      "tokens": 2072,
+      "citation_accuracy": 1.0
+    },
+    {
+      "query_id": "q11",
+      "query": "What is a communication session?",
+      "category": "definition",
+      "answer": "Based on the provided context, a communication session is defined across the ISO 15118 standards as follows:\n\n* **According to ISO 15118-1, Section 3.1.15**, it is a `\"sequence of time where the EVCC and the SECC interactively exchange digital information in order to manage charging or discharging the EV battery.\"` The standard notes that a communication session can be paused and resumed multiple times, and it encapsulates zero or more energy transfer periods.\n* **According to ISO 15118-2, Section 3.37**, it is an `\"association of two specific V2G Entities for exchanging V2G messages.\"` Section 8.4.1 further clarifies that it involves the exchange of V2G messages in a predefined sequence to manage the charging process. A V2G Communication Session always starts with the `SessionSetupReq/Res` message pair and always ends with the `SessionStopReq/Res` message pair. All messages within the session (except the initial `SessionSetupReq`) carry a negotiated `SessionID` to manage the session at the application level.",
+      "num_retrieved": 5,
+      "relevance_flags": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "section_flags": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "retrieved_sections": [
+        "8.4.1",
+        "3.1.15",
+        "8.4.1",
+        "8.4.1",
+        "3.37"
+      ],
+      "retrieval_ms": 3888.521007999998,
+      "generation_ms": 11856.423291,
+      "e2e_ms": 15744.944298999997,
+      "tokens": 3388,
+      "citation_accuracy": 1.0
+    },
+    {
+      "query_id": "q12",
+      "query": "What is a contactor?",
+      "category": "definition",
+      "answer": "According to ISO 15118-1, Section 3.1.16, a contactor is an **electrically controlled switch used for switching a power circuit**. \n\nThe standard further clarifies with two notes:\n* Unlike a circuit breaker, a contactor is not intended to interrupt a short circuit current.\n* From a communication perspective, the contactor acts as a trigger for the power supply.",
+      "num_retrieved": 5,
+      "relevance_flags": [
+        true,
+        true,
+        true,
+        true,
+        false
+      ],
+      "section_flags": [
+        true,
+        true,
+        true,
+        true,
+        false
+      ],
+      "retrieved_sections": [
+        "3.1.16",
+        "8.7.4.3",
+        "8.7.4.3",
+        "8.8.3.1",
+        "3.1.13"
+      ],
+      "retrieval_ms": 2223.381725999957,
+      "generation_ms": 5325.688467000077,
+      "e2e_ms": 7549.070193000034,
+      "tokens": 2358,
+      "citation_accuracy": 1.0
+    },
+    {
+      "query_id": "q13",
+      "query": "What is a credential?",
+      "category": "definition",
+      "answer": "Based on the provided context, a credential is defined in two ways across the standards:\n\n* According to **ISO 15118-2, Section 3.6**, credentials are defined as `\"anything that provides the basis for confidence, belief, credit, etc.\"` Examples explicitly listed include certificates, passwords, and user names.\n* According to **ISO 15118-1, Section 3.1.17**, a credential is specifically defined as a `\"document attesting the permission of the EV to be charged or to discharge.\"` \n\nBoth definitions indicate that credentials function as proof or authorization mechanisms within the vehicle-to-grid communication framework.",
+      "num_retrieved": 5,
+      "relevance_flags": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "section_flags": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "retrieved_sections": [
+        "3.6",
+        "3.1.17",
+        "E.4",
+        "E.4",
+        "E.4"
+      ],
+      "retrieval_ms": 3048.665724999978,
+      "generation_ms": 10183.212416000002,
+      "e2e_ms": 13231.878140999981,
+      "tokens": 4568,
+      "citation_accuracy": 1.0
+    },
+    {
+      "query_id": "q14",
+      "query": "What is demand and prognosis?",
+      "category": "definition",
+      "answer": "According to ISO 15118-1, Section 3.1.18, **demand and prognosis** is defined as a function that covers the collection of grid and local installation conditions which applies to the actual energy transfer process. \n\nAs an example provided in the same section, this function encompasses data such as:\n* Sales tariff tables containing price, CO\u2082 content, and percentage of renewable energy information over time, based on grid, energy production, energy demand, and customer contract information (along with optional contract-based current limitations).\n* Grid schedules that set current vs. time limitations at a specific EV supply equipment based on local installation and local electricity demand situations.",
+      "num_retrieved": 5,
+      "relevance_flags": [
+        true,
+        true,
+        true,
+        false,
+        false
+      ],
+      "section_flags": [
+        true,
+        true,
+        true,
+        false,
+        false
+      ],
+      "retrieved_sections": [
+        "3.1.18",
+        "3.1.50",
+        "3.1.18",
+        "3.1.46",
+        "8.6.2.1"
+      ],
+      "retrieval_ms": 5336.968474999992,
+      "generation_ms": 4699.339599000041,
+      "e2e_ms": 10036.308074000033,
+      "tokens": 3714,
+      "citation_accuracy": 1.0
+    },
+    {
+      "query_id": "q15",
+      "query": "What are distributed energy resources?",
+      "category": "definition",
+      "answer": "According to ISO 15118-1, Section 3.1.20, distributed energy resources (DER) are defined as a \"distributed set of one or more energy service resources, including generators, energy storage and controllable load, that can be used to deliver ancillary services.\"",
+      "num_retrieved": 5,
+      "relevance_flags": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ],
+      "section_flags": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ],
+      "retrieved_sections": [
+        "3.1.20",
+        "3.1.24",
+        "3.1.36",
+        "unknown",
+        "unknown"
+      ],
+      "retrieval_ms": 2305.0977229999603,
+      "generation_ms": 6682.247923000034,
+      "e2e_ms": 8987.345645999994,
+      "tokens": 2884,
+      "citation_accuracy": 1.0
+    },
+    {
+      "query_id": "q16",
+      "query": "What is the nominal AC charging voltage?",
+      "category": "parameter_lookup",
+      "answer": "Based on the provided context, I don't have enough information. The text does not specify a nominal AC charging voltage. It only references `EVSENomi nalVoltage` as a parameter/column header in the tables (Section A.1) without providing a value, and includes an example XML snippet in Section D.2.2 showing an `EVMaxVoltage` of 230 V, which is not explicitly defined as the nominal charging voltage.",
+      "num_retrieved": 5,
+      "relevance_flags": [
+        true,
+        false,
+        false,
+        false,
+        true
+      ],
+      "section_flags": [
+        true,
+        false,
+        false,
+        false,
+        true
+      ],
+      "retrieved_sections": [
+        "D.2.2",
+        "A.1",
+        "A.1",
+        "A.1",
+        "8.7.4.1"
+      ],
+      "retrieval_ms": 3857.6396509999995,
+      "generation_ms": 42712.60087300005,
+      "e2e_ms": 46570.240524000044,
+      "tokens": 8366,
+      "citation_accuracy": null
+    },
+    {
+      "query_id": "q17",
+      "query": "What voltage limits are defined for the EV?",
+      "category": "parameter_lookup",
+      "answer": "Based on the provided context, the following voltage limit elements are defined for the EV:\n\nAccording to **ISO 15118-2, Section 8.5.2.7 (Table 68)**, the EV-related voltage limit message elements use the PhysicalValueType definition with the following parameters:\n\n| Element Name             | Unit Symbol | Physical Unit | Minimum Value | Maximum Value |\n|--------------------------|-------------|---------------|---------------|---------------|\n| `EVMaximumVoltageLimit`  | V           | Volt          | 0             | 1000          |\n| `EVMaxVoltage`           | V           | Volt          | 0             | 1000          |\n\nAdditionally, **ISO 15118-2, Section B.3** maps the SAE J2847/2 signal `\"Vehicle Maximum Voltage Limit\"` to the ISO 15118 message element `DC_EVChargeParameter: EVMaximumVoltageLimit`.",
+      "num_retrieved": 5,
+      "relevance_flags": [
+        true,
+        false,
+        true,
+        false,
+        true
+      ],
+      "section_flags": [
+        true,
+        false,
+        true,
+        false,
+        true
+      ],
+      "retrieved_sections": [
+        "8.5.2.7",
+        "8.7.4.2",
+        "B.3",
+        "8.6.2.1",
+        "8.4.5.4.3"
+      ],
+      "retrieval_ms": 4276.4110470000105,
+      "generation_ms": 9724.230003999992,
+      "e2e_ms": 14000.641051000002,
+      "tokens": 6382,
+      "citation_accuracy": 1.0
+    },
+    {
+      "query_id": "q18",
+      "query": "How is a communication session established?",
+      "category": "procedure",
+      "answer": "Based on the provided context, a communication session is established through the following sequence:\n\n1. **Data-Link Establishment:** Both entities must first achieve a successful Data-Link establishment, indicated by `D-LINK_READY.indication(DLINKSTATUS=Link established)` ([ISO-15118-2, Sections 8.7.3.2 & 8.7.3.3]).\n2. **Timer & Timeout Initialization:** Upon receiving the link-established indication, both the EVCC and SECC configure their respective timeouts and start their monitoring timers:\n   - The **EVCC** sets `V2G_EVCC_CommunicationSetup_Timeout` (as defined in Table 111), resets `V2G_EVCC_CommunicationSetup_Timer`, and begins monitoring it ([ISO-15118-2, Section 8.7.3.2]).\n   - The **SECC** sets `V2G_SECC_CommunicationSetup_Performance_Time` (as defined in Table 110), resets `V2G_SECC_CommunicationSetup_Timer`, and begins monitoring it ([ISO-15118-2, Section 8.7.3.3]).\n3. **Session Setup Message Exchange:** The communication session officially starts with the `SessionSetupReq/Res` message pair ([ISO-15118-2, Section 8.4.1]). During this phase:\n   - The **SECC** waits for the `SessionSetupReq` message ([ISO-15118-2, Section 8.7.3.3]).\n   - The **EVCC** waits for the `SessionSetupRes` message ([ISO-15118-2, Section 8.7.3.2]).\n\nOnce this initial request/response exchange occurs, the predefined sequence of V2G messages begins, formally establishing the V2G Communication Session for managing the charging process.",
+      "num_retrieved": 5,
+      "relevance_flags": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "section_flags": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "retrieved_sections": [
+        "8.7.3.3",
+        "8.7.3.2",
+        "8.4.1",
+        "3.1.15",
+        "8.4.4.2.1"
+      ],
+      "retrieval_ms": 5009.257698000056,
+      "generation_ms": 11035.268762999976,
+      "e2e_ms": 16044.526461000032,
+      "tokens": 4032,
+      "citation_accuracy": 1.0
+    },
+    {
+      "query_id": "q19",
+      "query": "Describe the matching procedure.",
+      "category": "procedure",
+      "answer": "Based on the provided context from ISO 15118-3, the matching procedure can be described as follows:\n\n**1. Purpose and Scope**\nThe matching process is designed to operate between the EVCC and the low-layer communication module locally assigned to each socket-outlet on the EVSE side ([ISO-15118-3], Section 6.4.2.2). The complete description of the process is detailed in Clause 9 ([ISO-15118-3], Section 6.4.2.2).\n\n**2. Initialization Phase**\nThe procedure begins with the initialization of the matching process. During this phase, the node is configured to enhance the matching process ([ISO-15118-3], Section 9.2). Prior to entering the matching process, the configuration of the low-layer communication module must be completed ([ISO-15118-3], Section A.9).\n\n**3. Process Sequence and Validation**\nThe matching process is based on messages defined in [HPGP] ([ISO-15118-3], Section A.9). Figures A.1 and A.2 outline the complete sequence, which covers the steps from discovering other low-layer communication modules to the start of nominal communication ([ISO-15118-3], Section A.9). \nUnder certain technical conditions, the matching process may yield ambiguous results. In such cases, an additional validation process using signaling through the control pilot line is required to confirm the match ([ISO-15118-3], Section 9.1).\n\n**4. Error Handling and Retry Mechanism**\nIf the matching process fails, specific error handling and retry procedures are applied ([ISO-15118-3], Section A.9.8):\n\n| Requirement ID | Description |\n|---|---|\n| [V2G3-A09-122] | A timer TT_matching_repetition shall be started with the trigger of the matching process defined in Requirements [V2G3-M06-11] and [V2G3-M06-13]. |\n| [V2G3-A09-123] | In any case the matching process is considered as FAILED, the matching process shall be restarted as long as the timer TT_matching_repetition is not expired and a control pilot is detected in state Bx, Cx, or Dx. |\n| [V2G3-A09-124] | In any case the matching process is considered as FAILED, wait for a time of TT_matching_rate before restarting the process. |\n| [V2G3-A09-125] | If the matching process fails for all retries started within TT_matching_repeti- tion, the matching process shall be stopped in 'Unmatched' state (see Figure 11). |\n| [V2G3-A09-126] | In any case a plug out is detected during the matching process, the matching |\n\n*(Note: The context excerpt for requirement [V2G3-A09-126] is truncated.)*\n\nThis outlines the initialization, sequence basis, conditional validation, and failure/retry handling as specified in the provided documents.",
+      "num_retrieved": 5,
+      "relevance_flags": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "section_flags": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "retrieved_sections": [
+        "9.1",
+        "6.4.2.2",
+        "A.9",
+        "9.2",
+        "A.9.8"
+      ],
+      "retrieval_ms": 2140.5746479999834,
+      "generation_ms": 27144.02204600003,
+      "e2e_ms": 29284.596694000014,
+      "tokens": 8514,
+      "citation_accuracy": 1.0
+    },
+    {
+      "query_id": "q20",
+      "query": "How does bidirectional power transfer work?",
+      "category": "procedure",
+      "answer": "Based on the provided context, bidirectional power transfer (BPT) is defined as a **\"combination of forward or reverse power transfer sequences\"** (ISO 15118-1, Section 3.1.10). The standard replaces the term \"charging\" with \"energy transfer\" to precisely cover both forward and reverse power flow directions, explicitly noting that when \"energy transfer\" is used, it means both directions of power flow are possible (ISO 15118-1, Section 3.1.12). Additionally, ISO 15118-1 specifies use case element IDs F4 and F5 to describe bidirectional energy transfer scenarios (ISO 15118-2, Section 1).\n\nHowever, the provided excerpts do not detail the technical mechanisms, control logic, or step-by-step operational process of how bidirectional power transfer actually works. **I don't have enough information** to explain the full operational workflow based solely on this context.",
+      "num_retrieved": 5,
+      "relevance_flags": [
+        true,
+        true,
+        true,
+        true,
+        false
+      ],
+      "section_flags": [
+        true,
+        true,
+        true,
+        true,
+        false
+      ],
+      "retrieved_sections": [
+        "3.1.10",
+        "1",
+        "3.1.9",
+        "unknown",
+        "3.1.12"
+      ],
+      "retrieval_ms": 1650.7295149999663,
+      "generation_ms": 11829.146220999974,
+      "e2e_ms": 13479.87573599994,
+      "tokens": 3108,
+      "citation_accuracy": 1.0
+    },
+    {
+      "query_id": "q21",
+      "query": "Which clauses reference Annex A?",
+      "category": "cross_reference",
+      "answer": "Based on the provided context, I don't have enough information. The excerpt only contains sections located within Annex A itself (A.1, A.2, A.5, A.11.5) and general requirement structuring rules from Clause 5.2, but it does not list or indicate which other clauses reference Annex A.",
+      "num_retrieved": 5,
+      "relevance_flags": [
+        true,
+        true,
+        false,
+        true,
+        false
+      ],
+      "section_flags": [
+        true,
+        true,
+        false,
+        true,
+        false
+      ],
+      "retrieved_sections": [
+        "A.5",
+        "A.2",
+        "5.2",
+        "A.1",
+        "A.11.5"
+      ],
+      "retrieval_ms": 3107.1403070000088,
+      "generation_ms": 8831.428462999953,
+      "e2e_ms": 11938.568769999962,
+      "tokens": 3480,
+      "citation_accuracy": 1.0
+    },
+    {
+      "query_id": "q22",
+      "query": "Which clauses reference Annex C?",
+      "category": "cross_reference",
+      "answer": "Based on the provided context, **Section 8.2.3 of ISO 15118-2** references Annex C.2. Specifically, Table 22 within that section indicates that both the `SchemaID` and `ResponseCode` message elements should refer to Annex C.2 for their respective type definitions. No other clauses referencing Annex C are mentioned in the provided text.",
+      "num_retrieved": 5,
+      "relevance_flags": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ],
+      "section_flags": [
+        true,
+        false,
+        false,
+        false,
+        false
+      ],
+      "retrieved_sections": [
+        "8.2.3",
+        "A.5",
+        "5.2",
+        "A.2",
+        "A.11.5"
+      ],
+      "retrieval_ms": 2118.306748000009,
+      "generation_ms": 7107.554363000077,
+      "e2e_ms": 9225.861111000086,
+      "tokens": 2826,
+      "citation_accuracy": 1.0
+    },
+    {
+      "query_id": "q23",
+      "query": "What does Annex A describe?",
+      "category": "annex_lookup",
+      "answer": "Based on the provided context, Annex A describes the following:\n\n* **Technology-specific requirements:** It contains specific requirements that depend on the communication technology being used (ISO 15118-3, Section 6.2).\n* **HomePlug Green PHY Technology requirements:** Specifically, this Annex details all requirements for the HomePlug Green PHY Technology on the control pilot line, which are mandatory (ISO 15118-3, Section A.1).\n* **Applicable conventions:** It references that the conventions used throughout Annex A are defined in Clause 5 of ISO 15118-3 (ISO 15118-3, Section A.5).",
+      "num_retrieved": 5,
+      "relevance_flags": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "section_flags": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "retrieved_sections": [
+        "6.2",
+        "6.4.2.2",
+        "A.11.1",
+        "A.5",
+        "A.1"
+      ],
+      "retrieval_ms": 1906.633630999977,
+      "generation_ms": 8152.562668999963,
+      "e2e_ms": 10059.19629999994,
+      "tokens": 2756,
+      "citation_accuracy": 0.5
+    },
+    {
+      "query_id": "q24",
+      "query": "What does Annex C describe?",
+      "category": "annex_lookup",
+      "answer": "Based on the provided context, Annex C describes the complete XML Schema definition for the V2G communication protocol. Specifically:\n\n* According to **ISO 15118-2, Section 8.1**, Annex C includes the entire XML Schema definition describing both V2G Message Sets.\n* According to **Section 8.6.1**, it details the XML Schema containing all mandatory and optional definitions.\n* According to **Section 8.3.1**, it serves as the reference for the actual XML schema code.\n* According to **Section 8.2.3**, it also houses specific type definitions for message elements (referenced as `Annex C.2`).",
+      "num_retrieved": 5,
+      "relevance_flags": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "section_flags": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "retrieved_sections": [
+        "8.6.1",
+        "8.1",
+        "8.2.3",
+        "8.3.1",
+        "8.2.3"
+      ],
+      "retrieval_ms": 4637.1802930000285,
+      "generation_ms": 9629.025342999967,
+      "e2e_ms": 14266.205635999995,
+      "tokens": 4382,
+      "citation_accuracy": 1.0
+    },
+    {
+      "query_id": "q25",
+      "query": "Compare AC charging and DC charging.",
+      "category": "comparison",
+      "answer": "Based on the provided ISO 15118-2 excerpts, AC and DC charging are differentiated across message set structures, energy transfer mode definitions, communication phases, and parameter mappings. Here is a direct comparison based strictly on the provided context:\n\n### 1. Message Sets & Identification Modes\nBoth AC and DC charging modes utilize the same two identification methods (EIM and PnC), resulting in four fundamental Message Sets defined by the standard:\n* AC Charging EIM\n* DC Charging EIM\n* AC Charging PnC\n* DC Charging PnC\n*(According to ISO 15118-2, Section 8.6.1)*\n\n### 2. Energy Transfer Modes & Connector/Pin Specifications\nThe standard defines distinct `EnergyTransferModeType` values for AC versus DC charging, primarily differing in phase configuration and connector pin usage:\n\n| EnergyTransferMode   | Offered charging service                                                                              |\n|----------------------|-------------------------------------------------------------------------------------------------------|\n| AC_single_phase_core | AC single phase charging according to IEC 62196.                                                      |\n| AC_three_phase_core  | AC three phase charging according to IEC 62196.                                                       |\n| DC_core              | DC charging according to IEC 62196 on the core pins.                                                  |\n| DC_extended          | DC charging using the extended pins of an IEC 62196-3 Configuration EE or Configuration FF connector. |\n| DC_combo_core        | DC charging using the core pins of an IEC 62196-3 Configuration EE or Configuration FF connector.     |\n| DC_unique            | DC charging using a dedicated DC coupler.                                                             |\n\n*(According to ISO 15118-2, Section 8.5.2.4, Table 63)*\n\n### 3. Communication Phases & Control Phases (BC/HLC-C)\nIn the context of Basic Communication (BC) and High Level Communication (HLC-C) phases within a V2G Communication Session:\n* **AC Charging:** Explicitly allows for a BC phase to be applied. Additionally, when BC precedes HLC-C, it requires a nominal Duty Cycle rather than a 5% Duty Cycle.\n* **DC Charging:** Follows the same high-level session phases (Data Link Setup, V2G Setup, and V2G Charging Loop) but does not specify the same BC phase application rules in the provided excerpt.\n*(According to ISO 15118-2, Section 8.7.4.1)*\n\n### 4. Parameter & Message Mapping\nThe annex tables (Section A.1) demonstrate that AC and DC modes map to different message codes and parameters depending on the identification mode:\n* **AC Charging EIM** utilizes parameters such as `AC_EVSEChargeParameter`, `AC_EVSEStatus`, `RCD`, and `NotificationMaxDelay`, mapped to message codes `E1` and `E2`.\n* **DC Charging PnC** maps to different message codes (`E4`, `F3`) across multiple session steps.\n* **AC Charging PnC** and **DC Charging EIM** also follow distinct code mappings (e.g., `E3`, `E5`, `F3` for AC PnC; `D3`, `D4` for DC EIM) across header, body, and service scope messages.\n*(According to ISO 15118-2, Section A.1)*\n\n### Summary\nPer the provided context, AC charging is characterized by single/three-phase IEC 62196 compliance, supports a BC communication phase with specific duty cycle requirements, and uses dedicated AC-specific parameters (`E1`/`E2`). DC charging is defined by its reliance on specific connector pin configurations (core, extended, combo, or unique couplers), follows a different set of message codes (`E4`/`F3` or `D3`/`D4`), and operates within the standardized V2G session phases without the specified BC phase allowance.",
+      "num_retrieved": 5,
+      "relevance_flags": [
+        true,
+        false,
+        true,
+        true,
+        false
+      ],
+      "section_flags": [
+        true,
+        false,
+        true,
+        true,
+        false
+      ],
+      "retrieved_sections": [
+        "8.6.1",
+        "A.1",
+        "8.5.2.4",
+        "8.7.4.1",
+        "A.1"
+      ],
+      "retrieval_ms": 4245.948294999948,
+      "generation_ms": 28740.03273400001,
+      "e2e_ms": 32985.98102899996,
+      "tokens": 10362,
+      "citation_accuracy": 1.0
+    },
+    {
+      "query_id": "q26",
+      "query": "Compare plug and charge with external payment.",
+      "category": "comparison",
+      "answer": "I don't have enough information to provide a direct comparison between Plug and Charge and External Payment based on the provided context. However, the excerpts do define each concept separately:\n\n* **Plug and Charge (PnC)** is defined in ISO 15118-3, Section 3.24 as an identification mode where \"the customer just has to plug their vehicle into the EVSE and all aspects of charging are automatically taken care of with no further intervention from the customer.\" It is also categorized as an Identification Mode in ISO 15118-2, Section A.1.\n* **External Payment** is defined in ISO 15118-2, Section C.6 as one of two valid `paymentOptionType` enumeration values (alongside `\"Contract\"`). It is shown as a selectable payment method in service discovery responses per ISO 15118-2, Section D.1.\n\nThe provided text categorizes them as fundamentally different parameters (an identification mode governing session authorization vs. a payment option selected during service negotiation) but does not elaborate on their operational, financial, or procedural differences.",
+      "num_retrieved": 5,
+      "relevance_flags": [
+        false,
+        false,
+        true,
+        false,
+        true
+      ],
+      "section_flags": [
+        false,
+        true,
+        true,
+        false,
+        true
+      ],
+      "retrieved_sections": [
+        "D.1",
+        "A.1",
+        "8.7.4.2",
+        "C.6",
+        "3.24"
+      ],
+      "retrieval_ms": 4634.92132600004,
+      "generation_ms": 26529.464386999964,
+      "e2e_ms": 31164.385713000003,
+      "tokens": 8552,
+      "citation_accuracy": 1.0
+    },
+    {
+      "query_id": "q27",
+      "query": "What is the maximum charging current?",
+      "category": "parameter_lookup",
+      "answer": "Based on the provided context, there is no single fixed maximum charging current. Instead, the specification defines a protocol-level limit and outlines how the actual operational current is dynamically determined:\n\n**1. Protocol Maximum Value**\nAccording to ISO 15118-2, Section 8.5.2.7 (Table 68), the maximum defined value for current-related message elements is **400 Amperes**. The relevant table entries are:\n| Element Name | unitSymbolType | Physical unit | Minimum value | Maximum value |\n|----------------------------------|------------------|-----------------|-----------------|-----------------|\n| EVMaxCurrent | A | Ampere | 0 | 400 |\n| EVSEMaxCurrent | A | Ampere | 0 | 400 |\n| EVMaximumCurrentLimit | A | Ampere | 0 | 400 |\n| EVSEMaximumCurrentLimit | A | Ampere | 0 | 400 |\n\n**2. Dynamic Determination in Operation**\n- **AC Charging Negotiation:** Per ISO 15118-2, Section 8.5.3.3, the EV calculates the maximum available charging current using the `EVSENominalVoltage` provided by the EVSE, along with `PMax` values from the `SASchedule` element in the `ChargeParameterDiscoveryResponse` and `ChargingProfileEntryMaxPower` values in the `ChargingProfile` Power Delivery Request.\n- **HLC-C Mode:** Per ISO 15118-3, Section 6.4.3.1, when a nominal duty cycle is detected, the vehicle determines the maximum charge current by calculating the minimum of:\n  1. The maximum charge current given by the control pilot duty cycle;\n  2. The maximum charge current given by the HLC-C messages.\n\n**3. Example Instance Values**\nThe context also provides example XML snippets showing specific negotiated values:\n- `EVSEMaxCurrent` is shown as **50 A** (ISO 15118-2, Section D.3.2)\n- `EVMaxCurrent` is shown as **32 A** (ISO 15118-2, Section D.2.2)\n\nIn summary, while the ISO 15118 protocol defines a hard upper limit of **400 A**, the actual maximum charging current is dynamically calculated and negotiated between the EV and EVSE based on voltage, power schedules, control pilot signals, and HLC-C messages.",
+      "num_retrieved": 5,
+      "relevance_flags": [
+        false,
+        false,
+        false,
+        true,
+        false
+      ],
+      "section_flags": [
+        false,
+        false,
+        false,
+        true,
+        false
+      ],
+      "retrieved_sections": [
+        "8.5.3.3",
+        "6.4.3.1",
+        "D.3.2",
+        "8.5.2.7",
+        "D.2.2"
+      ],
+      "retrieval_ms": 4301.172347000033,
+      "generation_ms": 26092.460616999917,
+      "e2e_ms": 30393.63296399995,
+      "tokens": 8752,
+      "citation_accuracy": 1.0
+    },
+    {
+      "query_id": "q28",
+      "query": "Describe the SECC communication setup.",
+      "category": "procedure",
+      "answer": "Based on the provided context from ISO 15118-2, the SECC communication setup involves the following sequential steps and requirements:\n\n1. **IP Address Configuration**: The SECC must be configured with a valid IP address (static or dynamic) using any appropriate mechanism to enable a connection to the EVCC. The standard explicitly leaves the address assignment method out of scope, allowing operators to select suitable mechanisms such as static IPs or those detailed in subclauses 7.6.3.2 and 7.6.3.3 ([ISO-15118-2, Section 7.4]).\n\n2. **SDP Server Initialization**: After the IP address is successfully assigned, the SECC shall start the SDP (Service Discovery Protocol) server as defined in subclause 7.10.1. The SDP server functions as a V2G entity that provides configuration information for accessing the SECC. Note that this service does not need to run directly on the SECC; it may be hosted on a separate unit ([ISO-15118-2, Section 7.4]; [ISO-15118-2, Section 3.27]).\n\n3. **Data-Link Establishment & State Processing**: Upon receiving a successful Data-Link establishment indication (`D-LINK_READY.indication(DLINKSTATUS=Link established)`), the SECC initiates the address assignment mechanism and transitions through the defined V2G communication states. The standard specifies distinct state machines for both the EVCC and SECC perspectives ([ISO-15118-2, Section 7.4]).\n\n4. **Error Detection & Session Re-establishment**: The standard permits additional error detection mechanisms, provided they do not lead to incompatibility. If an error occurs during a charging session, the EVCC shall indicate a `Data-Link error` and proceed with recovery procedures. The EVCC can then establish a new V2G Communication Session by applying the state processing rules from Section 7.4, effectively restarting the communication setup identically to the initial session ([ISO-15118-2, Section 8.8.1]).",
+      "num_retrieved": 5,
+      "relevance_flags": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "section_flags": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "retrieved_sections": [
+        "7.4",
+        "7.4",
+        "8.8.1",
+        "7.4",
+        "3.27"
+      ],
+      "retrieval_ms": 2679.1851419999375,
+      "generation_ms": 18292.92014400005,
+      "e2e_ms": 20972.105285999987,
+      "tokens": 5796,
+      "citation_accuracy": 0.8571428571428571
+    },
+    {
+      "query_id": "q29",
+      "query": "What is the EVCC?",
+      "category": "definition",
+      "answer": "According to ISO 15118-1, Section 3.1.31, the **EVCC** (Electric Vehicle Communication Controller) is an embedded system located within the vehicle that implements communication between the vehicle and the SECC to support specific functions. As noted in the specification, these specific functions can include controlling input and output channels, encryption, or data transfer between the vehicle and the SECC.",
+      "num_retrieved": 5,
+      "relevance_flags": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "section_flags": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "retrieved_sections": [
+        "3.1.31",
+        "8.4.3.3.2",
+        "8.5.3.1",
+        "8.4.3.6.2",
+        "8.4.3.10.1"
+      ],
+      "retrieval_ms": 3402.8313909999497,
+      "generation_ms": 6352.275555999996,
+      "e2e_ms": 9755.106946999946,
+      "tokens": 3502,
+      "citation_accuracy": 1.0
+    },
+    {
+      "query_id": "q30",
+      "query": "What is the SECC?",
+      "category": "definition",
+      "answer": "Based on the provided context, I don't have enough information to define what the SECC is or what the acronym stands for. The provided excerpts only describe its operational roles within the protocol, such as authenticating to the EVCC, handling message request-response sequences, managing error response codes, and offering services like certificate updates.",
+      "num_retrieved": 5,
+      "relevance_flags": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "section_flags": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "retrieved_sections": [
+        "E.1.1",
+        "8.6.2.1",
+        "8.8.4.3",
+        "8.8.2",
+        "8.4.3.10.1"
+      ],
+      "retrieval_ms": 3939.457199000003,
+      "generation_ms": 14791.486168000003,
+      "e2e_ms": 18730.943367000007,
+      "tokens": 4588,
+      "citation_accuracy": null
+    },
+    {
+      "query_id": "q31",
+      "query": "What is the control pilot signal?",
+      "category": "parameter_lookup",
+      "answer": "Based on the provided context, the control pilot signal is characterized as follows:\n\n- **Definition & Function**: According to ISO 15118-2, Section 3.5, it carries the \"Control Pilot (Vehicle) State according to IEC 61851-1 signalled on Control Pilot Line.\"\n- **Signal Type**: According to ISO 15118-3, Section A.11.3, it operates as a \"PWM control pilot signal.\"\n- **Signal Composition**: According to ISO 15118-3, Section A.11.3, when additional communication protocols (e.g., HomePlug Green PHY) are coupled to the line, the resulting signal is the algebraic sum of the PWM control pilot signal and the added protocol signals.\n- **Reference Standard**: According to ISO 15118-3, Section A.11.1, detailed definitions and schematics for the control pilot signal are based on the specification in [IEC-1], Annex A.\n\nThe provided excerpts do not contain further technical specifications (such as voltage levels, duty cycles, or timing parameters) beyond these functional descriptions and standard references.",
+      "num_retrieved": 5,
+      "relevance_flags": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "section_flags": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "retrieved_sections": [
+        "A.11.1",
+        "A.11.3",
+        "6.4.2.1",
+        "3.5",
+        "A.6.1.1"
+      ],
+      "retrieval_ms": 1808.2172079999737,
+      "generation_ms": 22550.047431000054,
+      "e2e_ms": 24358.264639000026,
+      "tokens": 6440,
+      "citation_accuracy": 1.0
+    },
+    {
+      "query_id": "q32",
+      "query": "How does PLC communication work?",
+      "category": "procedure",
+      "answer": "Based on the provided context from ISO 15118-3, PLC communication operates through the following physical, coupling, and operational mechanisms:\n\n* **Physical Transmission Media:** The PLC signal is transmitted over a cable assembly that physically connects the power outlet to the EV (ISO 15118-3, Section B.6.2.1).\n* **Signal Coupling:** A signal coupling interface, detailed in Section B.9, defines the specific method used to couple the low-frequency PLC signal onto the communication media.\n* **Node Discovery & Quality Monitoring:** In G3-PLC technology, each communication node uses channel estimation features to construct a neighbor table. This table stores essential parameters for neighboring nodes, including a Link Quality Indicator (LQI) calculated from SNR measurements (ISO 15118-3, Section B.9.3).\n* **Control Messaging:** Communication for control purposes is handled via Management Message Entries (MMEs), which are messages exchanged between PLC nodes or between a PLC node and higher protocol layers (ISO 15118-3, Section 3.20).\n* **Operational Configuration:** For G3-PLC specifically, validating the identification of the PLC module on the EVSE side is not applicable. Additionally, PLC nodes can be configured to automatically avoid communication if the G3-PLC signal falls below a predefined threshold (ISO 15118-3, Section B.9.4).\n\nThe provided excerpts focus on the physical layer, signal coupling methodology, and basic node management rather than a complete protocol exchange sequence. Let me know if you need details on other sections of the specification.",
+      "num_retrieved": 5,
+      "relevance_flags": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "section_flags": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "retrieved_sections": [
+        "B.6.2.1",
+        "B.9.3",
+        "B.6.2.2",
+        "B.9.4",
+        "3.20"
+      ],
+      "retrieval_ms": 3798.9753650000466,
+      "generation_ms": 16491.966306999984,
+      "e2e_ms": 20290.94167200003,
+      "tokens": 5038,
+      "citation_accuracy": 1.0
+    }
+  ],
+  "indexing_breakdown_ms": {
+    "chunking": 481.89844099999846,
+    "embedding": 115173.18297099999,
+    "build_total": 116646.74944300002
+  },
+  "notes": "graph-enhanced hybrid + rerank"
+}

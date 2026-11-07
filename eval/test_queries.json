@@ -1,0 +1,22 @@
+[
+  {"id": "q01", "query": "What is the maximum AC charging voltage?", "category": "parameter_lookup", "expected_section": "8.9.2.2", "gold_answer": ""},
+  {"id": "q02", "query": "Describe the SLAC communication setup procedure.", "category": "procedure", "expected_section": "8.6.2.1", "gold_answer": ""},
+  {"id": "q03", "query": "What clauses does Section 1 reference?", "category": "cross_reference", "expected_section": "1", "gold_answer": ""},
+  {"id": "q04", "query": "What does Annex A describe?", "category": "annex_lookup", "expected_section": "Annex A", "gold_answer": ""},
+  {"id": "q05", "query": "What is an actor in ISO 15118?", "category": "definition", "expected_section": "3.1.1", "gold_answer": ""},
+  {"id": "q06", "query": "What are ancillary services?", "category": "definition", "expected_section": "3.1.2", "gold_answer": ""},
+  {"id": "q07", "query": "Compare AC charging and DC charging.", "category": "comparison", "expected_section": "", "gold_answer": ""},
+  {"id": "q08", "query": "What is the nominal AC charging voltage?", "category": "parameter_lookup", "expected_section": "", "gold_answer": ""},
+  {"id": "q09", "query": "How is a communication session established?", "category": "procedure", "expected_section": "", "gold_answer": ""},
+  {"id": "q10", "query": "What is specified in the annexes?", "category": "annex_lookup", "expected_section": "", "gold_answer": ""},
+  {"id": "q11", "query": "What is authentication in ISO 15118?", "category": "definition", "expected_section": "3.1.4", "gold_answer": ""},
+  {"id": "q12", "query": "What is the maximum charging current?", "category": "parameter_lookup", "expected_section": "", "gold_answer": ""},
+  {"id": "q13", "query": "Which sections reference Annex C?", "category": "cross_reference", "expected_section": "", "gold_answer": ""},
+  {"id": "q14", "query": "Describe the matching procedure.", "category": "procedure", "expected_section": "", "gold_answer": ""},
+  {"id": "q15", "query": "What is a battery management system?", "category": "definition", "expected_section": "3.1.8", "gold_answer": ""},
+  {"id": "q16", "query": "Compare plug and charge with external payment.", "category": "comparison", "expected_section": "", "gold_answer": ""},
+  {"id": "q17", "query": "What voltage limits are defined for the EV?", "category": "parameter_lookup", "expected_section": "", "gold_answer": ""},
+  {"id": "q18", "query": "What does Section 3 reference?", "category": "cross_reference", "expected_section": "3", "gold_answer": ""},
+  {"id": "q19", "query": "What is covered in the informative annexes?", "category": "annex_lookup", "expected_section": "", "gold_answer": ""},
+  {"id": "q20", "query": "How does bidirectional power transfer work?", "category": "procedure", "expected_section": "", "gold_answer": ""}
+]

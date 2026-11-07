@@ -1,0 +1,26 @@
+# Cloud deployment dependencies — API-only (no torch / docling / sentence-transformers).
+# Use with CLOUD_MODE=1: the Chroma index is pre-built locally and shipped with the app.
+# chromadb is pinned so locally-built indexes open cleanly in the container.
+
+# --- Core LangChain ---
+langchain>=0.3.0
+langchain-core>=0.3.0
+langchain-community>=0.3.0
+langchain-chroma>=0.2.0
+langchain-text-splitters>=0.3.0
+langchain-classic>=1.0.0
+
+# --- Model providers (all API: OpenRouter / OpenAI-compatible) ---
+langchain-openai>=0.2.0
+
+# --- Retrieval ---
+rank_bm25>=0.2.2
+chromadb==0.5.23
+networkx>=3.0
+
+# --- UI + utilities ---
+streamlit>=1.38.0
+pandas>=2.0
+python-dotenv>=1.0
+pydantic>=2.0
+pyyaml

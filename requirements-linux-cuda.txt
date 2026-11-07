@@ -1,0 +1,10 @@
+# Ubuntu / NVIDIA GPU (CUDA) install file.
+# Pulls the CUDA-enabled torch wheel from the PyTorch index.
+# Adjust cu124 to match your installed driver/CUDA toolkit if needed.
+# Usage:
+#   python3.12 -m venv .venv && source .venv/bin/activate
+#   pip install -r requirements-linux-cuda.txt
+
+-r requirements.txt
+--extra-index-url https://download.pytorch.org/whl/cu124
+torch>=2.2

@@ -1,0 +1,172 @@
+Use nvidia/nemotron-3.5-embed-1b:free with the OpenRouter API:
+
+OpenRouter provides an OpenAI-compatible embeddings API that you can call directly, or using the OpenAI SDK.
+
+In the examples below, the OpenRouter-specific headers are optional. Setting them allows your app to appear on the OpenRouter leaderboards.
+----------------------------------------------------------------------------------------------
+from openai import OpenAI
+
+client = OpenAI(
+  base_url="https://openrouter.ai/api/v1",
+  api_key="<OPENROUTER_API_KEY>",
+)
+
+embedding = client.embeddings.create(
+  extra_headers={
+    "HTTP-Referer": "<YOUR_SITE_URL>", # Optional. Site URL for rankings on openrouter.ai.
+    "X-OpenRouter-Title": "<YOUR_SITE_NAME>", # Optional. Site title for rankings on openrouter.ai.
+  },
+  model="nvidia/nemotron-3.5-embed-1b:free",
+  input="Your text string goes here",
+  # input: ["text1", "text2", "text3"] # batch embeddings also supported!
+  encoding_format="float"
+)
+print(embedding.data[0].embedding)
+------------------------------------------------------------------------------------------------
+>> reranker
+
+Use nvidia/nemotron-3.5-rerank-8b:free with the OpenRouter API:
+
+OpenRouter provides a rerank API that reorders documents by relevance to a query. Pass a query and a list of documents, and the model returns them ranked by relevance score.
+
+In the examples below, the OpenRouter-specific headers are optional. Setting them allows your app to appear on the OpenRouter leaderboards.
+
+import requests
+import json
+
+response = requests.post(
+  url="https://openrouter.ai/api/v1/rerank",
+  headers={
+    "Authorization": "Bearer <OPENROUTER_API_KEY>",
+    "Content-Type": "application/json",
+    "HTTP-Referer": "<YOUR_SITE_URL>", # Optional. Site URL for rankings on openrouter.ai.
+    "X-OpenRouter-Title": "<YOUR_SITE_NAME>", # Optional. Site title for rankings on openrouter.ai.
+  },
+  data=json.dumps({
+    "model": "nvidia/nemotron-3.5-rerank-8b:free",
+    "query": "a photograph of a cat",
+    # Documents can mix images and text. Images are remote URLs or base64 data URIs.
+    "documents": [
+      {"image": "https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat03.jpg"},
+      {"text": "A fluffy cat sitting on a windowsill in the sun."},
+      {"text": "A street map of downtown Berlin."}
+    ],
+    "top_n": 3
+  })
+)
+
+results = response.json()
+for result in results["results"]:
+  document = result["document"]
+  source = document.get("image") or document.get("text")
+  print(f"Index: {result['index']}, Score: {result['relevance_score']}, Source: {source}")
+
+-----------------------------------------------------------------------------------------------------------
+
+
+Make your first request
+Use nvidia/llama-nemotron-rerank-vl-1b-v2:free with the OpenRouter API:
+
+OpenRouter provides a rerank API that reorders documents by relevance to a query. Pass a query and a list of documents, and the model returns them ranked by relevance score.
+
+In the examples below, the OpenRouter-specific headers are optional. Setting them allows your app to appear on the OpenRouter leaderboards.
+
+import requests
+import json
+
+response = requests.post(
+  url="https://openrouter.ai/api/v1/rerank",
+  headers={
+    "Authorization": "Bearer <OPENROUTER_API_KEY>",
+    "Content-Type": "application/json",
+    "HTTP-Referer": "<YOUR_SITE_URL>", # Optional. Site URL for rankings on openrouter.ai.
+    "X-OpenRouter-Title": "<YOUR_SITE_NAME>", # Optional. Site title for rankings on openrouter.ai.
+  },
+  data=json.dumps({
+    "model": "nvidia/llama-nemotron-rerank-vl-1b-v2:free",
+    "query": "a photograph of a cat",
+    # Documents can mix images and text. Images are remote URLs or base64 data URIs.
+    "documents": [
+      {"image": "https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat03.jpg"},
+      {"text": "A fluffy cat sitting on a windowsill in the sun."},
+      {"text": "A street map of downtown Berlin."}
+    ],
+    "top_n": 3
+  })
+)
+
+results = response.json()
+for result in results["results"]:
+  document = result["document"]
+  source = document.get("image") or document.get("text")
+  print(f"Index: {result['index']}, Score: {result['relevance_score']}, Source: {source}")
+
+
+-----------------------------------------------------------------------------------------------------------------
+Use z-ai/glm-5.3-flash with the OpenRouter API:
+
+OpenRouter supports reasoning-enabled models that can show their step-by-step thinking process. Use the reasoning parameter in your request to enable reasoning, and access the reasoning_details array in the response to see the model's internal reasoning before the final answer. When continuing a conversation, preserve the complete reasoning_details when passing messages back to the model so it can continue reasoning from where it left off. Learn more about reasoning tokens.
+
+In the examples below, the OpenRouter-specific headers are optional. Setting them allows your app to appear on the OpenRouter leaderboards.
+
+from openai import OpenAI
+
+client = OpenAI(
+  base_url="https://openrouter.ai/api/v1",
+  api_key="<OPENROUTER_API_KEY>",
+)
+
+# First API call with reasoning
+response = client.chat.completions.create(
+  model="z-ai/glm-5.3-flash",
+  messages=[
+          {
+            "role": "user",
+            "content": "How many r's are in the word 'strawberry'?"
+          }
+        ],
+  extra_body={"reasoning": {"enabled": True}}
+)
+
+# Extract the assistant message with reasoning_details
+response = response.choices[0].message
+
+# Preserve the assistant message with reasoning_details
+messages = [
+  {"role": "user", "content": "How many r's are in the word 'strawberry'?"},
+  {
+    "role": "assistant",
+    "content": response.content,
+    "reasoning_details": response.reasoning_details  # Pass back unmodified
+  },
+  {"role": "user", "content": "Are you sure? Think carefully."}
+]
+
+# Second API call - model continues reasoning from where it left off
+response2 = client.chat.completions.create(
+  model="z-ai/glm-5.3-flash",
+  messages=messages,
+  extra_body={"reasoning": {"enabled": True}}
+)
+
+
+---------------------------------------------------------------------------------
+
+from openai import OpenAI
+
+client = OpenAI(
+  base_url="https://openrouter.ai/api/v1",
+  api_key="<OPENROUTER_API_KEY>",
+)
+
+embedding = client.embeddings.create(
+  extra_headers={
+    "HTTP-Referer": "<YOUR_SITE_URL>", # Optional. Site URL for rankings on openrouter.ai.
+    "X-OpenRouter-Title": "<YOUR_SITE_NAME>", # Optional. Site title for rankings on openrouter.ai.
+  },
+  model="qwen/qwen3-embedding-8b",
+  input="Your text string goes here",
+  # input: ["text1", "text2", "text3"] # batch embeddings also supported!
+  encoding_format="float"
+)
+print(embedding.data[0].embedding)
