@@ -111,7 +111,18 @@ def render_admin_page() -> None:
                 set_setting("master_api_key", master_key)
                 set_setting("master_embedding_model", embedding_model)
                 set_setting("master_llm_model", llm_model)
-                st.success("API settings saved.")
+                # Force-set the env var so the new key takes effect immediately,
+                # and clear cached model clients so they rebuild with the new key.
+                import os
+
+                if master_key:
+                    os.environ["OPENROUTER_API_KEY"] = master_key
+                from models.llm import clear_llm_cache
+                from models.embeddings import clear_embeddings_cache
+
+                clear_llm_cache()
+                clear_embeddings_cache()
+                st.success("API settings saved. New key is active for all users.")
 
         st.divider()
         st.write("Current endpoint configuration:")

@@ -11,6 +11,7 @@ from webapp.auth import require_auth, current_user
 from webapp.config import USERS_DIR
 from webapp.db import add_document, list_documents, update_document_status
 from webapp.pipeline import build_pairing2_pipeline, reset_user_index, user_pdf_dir
+from webapp.secrets import require_openrouter_api_key
 
 
 def _save_uploaded_file(user_id: int, uploaded_file) -> Path:
@@ -31,6 +32,14 @@ def render_upload_page() -> None:
     user = current_user()
     if user is None:
         st.error("Not logged in.")
+        return
+
+    # Check that the admin has set the OpenRouter API key.
+    try:
+        require_openrouter_api_key()
+    except ValueError as exc:
+        st.error(str(exc))
+        st.info("Please ask the admin to set the OpenRouter API key in the Admin Dashboard.")
         return
 
     user_id = int(user["id"])

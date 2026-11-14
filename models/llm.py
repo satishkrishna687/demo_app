@@ -12,6 +12,7 @@ Example:
 
 from __future__ import annotations
 
+import os
 import urllib.request
 
 from typing import Any
@@ -27,8 +28,6 @@ _SUPPORTED_PROVIDERS = ("ollama", "openai")
 
 def _resolve_api_key(env_var: str) -> str:
     """Resolve an API key from the environment, raising a clear error if missing."""
-    import os
-
     key = os.environ.get(env_var, "").strip()
     if not key:
         raise ValueError(
@@ -78,9 +77,11 @@ def get_llm(
         kwargs: dict[str, Any] = {"model": name, "temperature": temperature}
         if url:
             kwargs["base_url"] = url
+        # Always pass the API key explicitly so langchain_openai does not fall back
+        # to OPENAI_API_KEY from the environment (which would break OpenRouter).
         if api_key:
             kwargs["api_key"] = api_key
-        elif LLM_API_KEY_ENV != "OPENAI_API_KEY":
+        else:
             kwargs["api_key"] = _resolve_api_key(LLM_API_KEY_ENV)
         llm: BaseChatModel = ChatOpenAI(**kwargs)
     elif prov == "ollama":

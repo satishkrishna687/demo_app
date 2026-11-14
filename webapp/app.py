@@ -12,6 +12,7 @@ existing ``ui/`` application. It provides:
 
 from __future__ import annotations
 
+import os
 import sys
 from pathlib import Path
 
@@ -22,6 +23,16 @@ if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
 import streamlit as st
+
+# Expose OPENROUTER_API_KEY as an env var so the model factories can pick it up.
+# The admin-set key (from SQLite) takes priority over any stale .env value, so we
+# force-set (not setdefault). Do NOT crash if it is not set — the admin can
+# configure it via the Admin Dashboard.
+from webapp.secrets import get_openrouter_api_key
+
+_key = get_openrouter_api_key()
+if _key:
+    os.environ["OPENROUTER_API_KEY"] = _key
 
 from webapp.config import ROOT, USERS_DIR, ADMIN_USERNAME
 from webapp.auth import (
@@ -76,6 +87,7 @@ with st.sidebar:
                 else:
                     if st.button("Build pipeline for all files", type="primary"):
                         from webapp.user_upload import build_multiple_pipelines
+
                         build_multiple_pipelines(int(user["id"]), uploaded_files)
 
             st.divider()
@@ -85,7 +97,11 @@ with st.sidebar:
                 st.caption("No documents yet.")
             else:
                 for d in docs:
-                    status_icon = "✅" if d["status"] == "indexed" else ("⏳" if d["status"] == "indexing" else "📄")
+                    status_icon = (
+                        "✅"
+                        if d["status"] == "indexed"
+                        else ("⏳" if d["status"] == "indexing" else "📄")
+                    )
                     st.write(f"{status_icon} {d['filename']} — {d['status']}")
     else:
         page = None

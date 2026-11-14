@@ -14,6 +14,7 @@ from webapp.config import LLM_MODEL, LLM_BASE_URL, LLM_API_KEY_ENV, EMBEDDING_MO
 from webapp.db import get_setting
 from models.llm import get_llm
 from webapp.pipeline import user_index_dir
+from webapp.secrets import require_openrouter_api_key
 
 
 def _format_sources(docs: list) -> str:
@@ -48,6 +49,14 @@ def render_chat_page() -> None:
     user = current_user()
     if user is None:
         st.error("Not logged in.")
+        return
+
+    # Check that the admin has set the OpenRouter API key.
+    try:
+        require_openrouter_api_key()
+    except ValueError as exc:
+        st.error(str(exc))
+        st.info("Please ask the admin to set the OpenRouter API key in the Admin Dashboard.")
         return
 
     user_id = int(user["id"])
